@@ -14,6 +14,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           Anchor: {
             styles: { root: { textDecoration: "none", color: "#ff506e" } },
           },
+          Text: { styles: { root: { color: "#1E293B" } } },
+          Title: { styles: { root: { color: "#1E293B" } } },
         },
       }}
     >
@@ -21,6 +23,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         styles={(theme) => ({
           "body, html": { background: "#F1F5F9" },
           "a:hover": { textDecoration: "none !important" },
+          main: {
+            padding: "0 !important",
+          },
         })}
       />
 
