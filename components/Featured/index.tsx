@@ -30,7 +30,7 @@ export default function Featured({ featured }: props) {
   return (
     <section className={classes.section}>
       {breakpoint ? (
-        <Group>
+        <Group align="center" position="apart">
           {featured.map(({ _id, photoURL, name, price, rating }, i: number) => (
             <FeaturedCard
               price={price}

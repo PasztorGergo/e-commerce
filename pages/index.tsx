@@ -38,7 +38,7 @@ export async function getStaticProps() {
     await client.query({
       query: gql`
         query Featured {
-          products {
+          products(limit: 3) {
             _id
             description
             name
