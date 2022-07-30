@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Anchor,
   Box,
@@ -11,6 +11,7 @@ import {
   Title,
 } from "@mantine/core";
 import Link from "next/link";
+import { motion, useAnimation } from "framer-motion";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -22,56 +23,81 @@ const useStyles = createStyles((theme) => ({
       padding: ".2rem 6rem",
     },
     [theme.fn.smallerThan("sm")]: {
-      padding: ".2rem 1rem",
+      padding: ".2rem 0rem",
     },
+    minHeight: "fit-content",
   },
 }));
 
 export default function Header() {
   const { classes } = useStyles();
   const [isOpen, setOpen] = useState<boolean>(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isOpen) {
+      controls.start(() => ({ scaleY: 1, transformOrigin: "top" }));
+    } else {
+      controls.start(() => ({ scaleY: 0, transformOrigin: "top" }));
+    }
+  }, [controls, isOpen]);
 
   return (
-    <H fixed height="10vh" className={classes.header}>
+    <H
+      fixed
+      height="10vh"
+      sx={{ minHeight: "max-content" }}
+      className={classes.header}
+    >
       <MediaQuery styles={{ display: "none" }} largerThan="sm">
-        <Group>
-          <Title order={3}>
-            <Link href="/">
-              <Anchor>Pastore</Anchor>
-            </Link>
-          </Title>
-          <Burger opened={isOpen} onClick={() => setOpen((prev) => !prev)} />
-          {isOpen && (
-            <Stack>
+        <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
+          <Group position="apart" sx={{ height: "100%" }} px="1rem">
+            <Title order={3}>
+              <Link href="/">
+                <Anchor>Pastore</Anchor>
+              </Link>
+            </Title>
+            <Burger
+              sx={{ color: "#1E293B" }}
+              opened={isOpen}
+              onClick={() => setOpen((prev) => !prev)}
+            />
+          </Group>
+          <motion.div
+            animate={controls}
+            initial={{ scaleY: 0 }}
+            style={{ background: "white", width: "100%" }}
+          >
+            <Stack px="1rem">
               <Link href="/products">
                 <Anchor>Products</Anchor>
+              </Link>
+              <Link href="/contants">
+                <Anchor>Contants</Anchor>
               </Link>
               <Link href="/about">
                 <Anchor>About</Anchor>
               </Link>
-              <Link href="/contact">
-                <Anchor>Contact</Anchor>
-              </Link>
             </Stack>
-          )}
-        </Group>
+          </motion.div>
+        </Box>
       </MediaQuery>
       <MediaQuery styles={{ display: "none" }} smallerThan="sm">
-        <Group grow sx={{ width: "100%" }}>
+        <Group sx={{ width: "100%" }} position="apart" align="center">
           <Title order={3}>
             <Link href="/">
               <Anchor>Pastore</Anchor>
             </Link>
           </Title>
-          <Group position="right">
+          <Group sx={{ gap: "2rem" }}>
             <Link href="/products">
               <Anchor>Products</Anchor>
             </Link>
+            <Link href="/contants">
+              <Anchor>Contants</Anchor>
+            </Link>
             <Link href="/about">
               <Anchor>About</Anchor>
-            </Link>
-            <Link href="/contact">
-              <Anchor>Contact</Anchor>
             </Link>
           </Group>
         </Group>

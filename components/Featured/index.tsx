@@ -3,6 +3,7 @@ import { createStyles, Group } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Carousel } from "@mantine/carousel";
 import FeaturedCard from "../FeaturedCard";
+import { featured } from "../../models";
 
 const useStyles = createStyles((theme) => ({
   section: {
@@ -17,14 +18,6 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-type featured = {
-  _id: string;
-  photoURL: string;
-  name: string;
-  description: string;
-  url: string;
-};
-
 type props = {
   featured: Array<featured>;
 };
@@ -38,25 +31,30 @@ export default function Featured({ featured }: props) {
     <section className={classes.section}>
       {breakpoint ? (
         <Group>
-          {featured.map(
-            ({ _id, photoURL, name, description, url }, i: number) => (
-              <FeaturedCard
-                description={description}
-                name={name}
-                photoURL={photoURL}
-                key={_id}
-                url={url}
-              />
-            )
-          )}
+          {featured.map(({ _id, photoURL, name, price, rating }, i: number) => (
+            <FeaturedCard
+              price={price}
+              rating={rating}
+              name={name}
+              photoURL={photoURL}
+              key={_id}
+              _id={_id}
+            />
+          ))}
         </Group>
       ) : (
-        <Carousel>
-          <Carousel.Slide></Carousel.Slide>
-          <Carousel.Slide></Carousel.Slide>
-          <Carousel.Slide></Carousel.Slide>
-          <Carousel.Slide></Carousel.Slide>
-          <Carousel.Slide></Carousel.Slide>
+        <Carousel loop>
+          {featured.map(({ _id, photoURL, name, price, rating }, i: number) => (
+            <Carousel.Slide key={_id}>
+              <FeaturedCard
+                price={price}
+                rating={rating}
+                name={name}
+                photoURL={photoURL}
+                _id={_id}
+              />
+            </Carousel.Slide>
+          ))}
         </Carousel>
       )}
     </section>
