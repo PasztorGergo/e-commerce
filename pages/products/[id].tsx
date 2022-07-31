@@ -1,17 +1,127 @@
 import { gql } from "@apollo/client";
+import {
+  Button,
+  createStyles,
+  Group,
+  Stack,
+  Title,
+  Text,
+  NumberInput,
+} from "@mantine/core";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useMemo, useReducer } from "react";
 import { app, client, credentials } from "../../app";
 import { product } from "../../models";
+import Image from "next/image";
+import { FaCartPlus, FaMinus, FaPlus } from "react-icons/fa";
+import { AmountButton } from "../../components";
+import { openConfirmModal } from "@mantine/modals";
+import Link from "next/link";
 
-const Product: NextPage = ({ product }: any) => {
-  console.log(product);
+const useStyles = createStyles((theme) => ({
+  section: {
+    [theme.fn.largerThan("sm")]: {
+      padding: ".2rem 6rem",
+    },
+    [theme.fn.smallerThan("sm")]: {
+      padding: ".2rem 1rem",
+    },
+    marginTop: "15vh",
+  },
+  button: {
+    background: "#FF506E",
+    "&:hover": {
+      background: theme.fn.darken("#FF506E", 0.05),
+    },
+  },
+}));
+
+const Product: NextPage = ({ products }: any) => {
+  const product: product = useMemo(() => products[0], []);
+  const { classes } = useStyles();
+
+  const addToCart = () => {
+    openConfirmModal({
+      title: "Product has just been added to the cart",
+      children: (
+        <Group>
+          <Image src={product.photoURL} width={213} height={213} />
+          <Stack>
+            <Title order={3}>Would you like to continue shopping?</Title>
+            <Text>
+              {product.name
+                ?.split("-")
+                .map(
+                  (current: any) =>
+                    current.charAt(0).toUpperCase() + current.slice(1)
+                )
+                .join(" ")}{" "}
+              has just been added to your cart.
+            </Text>
+          </Stack>
+        </Group>
+      ),
+      labels: {
+        confirm: (
+          <Link href="/cart">
+            <a>Go to checkout</a>
+          </Link>
+        ),
+        cancel: "Continue shopping",
+      },
+      confirmProps: {
+        sx: (theme) => ({
+          background: "#FF506E",
+          "&:hover": {
+            background: theme.fn.darken("#FF506E", 0.05),
+          },
+        }),
+      },
+    });
+  };
+
   return (
     <>
       <Head>
-        <title>{product?.name} | Pastore</title>
+        <title>
+          {product.name
+            ?.split("-")
+            .map(
+              (current: any) =>
+                current.charAt(0).toUpperCase() + current.slice(1)
+            )
+            .join(" ")}{" "}
+          | Pastore
+        </title>
       </Head>
-      <div>{product?.name}</div>
+      <section className={classes.section}>
+        <Group align="self-start" sx={{ gap: "1rem" }}>
+          <Image src={product.photoURL} width="445" height="445" />
+          <Stack align="flex-start">
+            <Title order={2}>
+              {product.name
+                .split("-")
+                .map(
+                  (current) =>
+                    current.charAt(0).toUpperCase() + current.slice(1)
+                )
+                .join(" ")}
+            </Title>
+            <Text>{product.description}</Text>
+            <Group grow>
+              <AmountButton />
+              <Button
+                className={classes.button}
+                rightIcon={<FaCartPlus />}
+                onClick={() => addToCart()}
+              >
+                Add to cart
+              </Button>
+            </Group>
+          </Stack>
+        </Group>
+      </section>
     </>
   );
 };
@@ -31,7 +141,7 @@ export async function getStaticPaths() {
       `,
     })
   ).data.products.map((x: any) => ({
-    params: { id: x.name.toLowerCase().replaceAll(" ", "-") },
+    params: { id: x.name },
   }));
 
   return {
@@ -41,19 +151,12 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const name = (params.id as string)
-    .split("-")
-    .map((current) => current.charAt(0).toUpperCase() + current.slice(1))
-    .join(" ");
-
-  console.log(name);
-
   await app.logIn(credentials);
-  const product = (
+  const products = (
     await client.query({
       query: gql`
         query GetProduct {
-          products(query: {name: "${name}"}) {
+          products(query: {name: "${params.id}"}) {
             _id
             name
             description
@@ -68,7 +171,7 @@ export async function getStaticProps({ params }: any) {
 
   return {
     props: {
-      product,
+      products,
     },
   };
 }

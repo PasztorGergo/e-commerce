@@ -23,7 +23,14 @@ export default function FeaturedCard({
       </Card.Section>
       <Card.Section p="xl">
         <Group position="apart" align="center" sx={{ width: "100%" }}>
-          <Title order={5}>{name}</Title>
+          <Title order={5}>
+            {name
+              .split("-")
+              .map(
+                (current) => current.charAt(0).toUpperCase() + current.slice(1)
+              )
+              .join(" ")}
+          </Title>
           <Ratings rating={rating} />
         </Group>
         <Text>${price}</Text>
@@ -38,7 +45,7 @@ export default function FeaturedCard({
             },
           })}
           component="a"
-          href={`/${name.toLowerCase().replaceAll(" ", "-")}`}
+          href={`/products/${name}`}
         >
           See more
         </Button>

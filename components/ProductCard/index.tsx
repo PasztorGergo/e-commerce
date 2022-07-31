@@ -31,7 +31,14 @@ export default function index({
           <Image src={photoURL} />
         </Card.Section>
         <Card.Section p="md">
-          <Title order={3}>{name}</Title>
+          <Title order={3}>
+            {name
+              .split("-")
+              .map(
+                (current) => current.charAt(0).toUpperCase() + current.slice(1)
+              )
+              .join(" ")}
+          </Title>
           <Text color="dimmed">{description}</Text>
         </Card.Section>
       </Card>

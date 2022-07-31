@@ -4,6 +4,7 @@ import { AppShell, MantineProvider } from "@mantine/core";
 import { Footer, Header } from "../components";
 import { Global } from "@emotion/react";
 import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -29,12 +30,13 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         })}
       />
-
-      <NotificationsProvider>
-        <AppShell header={<Header />} footer={<Footer />}>
-          <Component {...pageProps} />
-        </AppShell>
-      </NotificationsProvider>
+      <ModalsProvider>
+        <NotificationsProvider>
+          <AppShell header={<Header />} footer={<Footer />}>
+            <Component {...pageProps} />
+          </AppShell>
+        </NotificationsProvider>
+      </ModalsProvider>
     </MantineProvider>
   );
 }
