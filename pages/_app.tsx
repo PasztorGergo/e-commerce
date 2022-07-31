@@ -1,8 +1,9 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AppShell, MantineProvider } from "@mantine/core";
-import { Header } from "../components";
+import { Footer, Header } from "../components";
 import { Global } from "@emotion/react";
+import { NotificationsProvider } from "@mantine/notifications";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -29,9 +30,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         })}
       />
 
-      <AppShell header={<Header />}>
-        <Component {...pageProps} />
-      </AppShell>
+      <NotificationsProvider>
+        <AppShell header={<Header />} footer={<Footer />}>
+          <Component {...pageProps} />
+        </AppShell>
+      </NotificationsProvider>
     </MantineProvider>
   );
 }

@@ -11,11 +11,15 @@ export default function Ratings({ rating }: Props) {
   return (
     <Group>
       {Array<any>(rounded)
-        .fill(<FaStar color="#ffcd3c" size="16" />)
-        .map((x) => x)}
+        .fill("")
+        .map((x, i: number) => (
+          <FaStar key={i} color="ffcd3c" size={16} />
+        ))}
       {Array<any>(5 - rounded)
-        .fill(<FaRegStar color="#ffcd3c" size="16" />)
-        .map((x) => x)}
+        .fill("")
+        .map((x, i: number) => (
+          <FaRegStar key={i} color="ffcd3c" size={16} />
+        ))}
     </Group>
   );
 }
