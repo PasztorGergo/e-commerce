@@ -46,7 +46,12 @@ const Product: NextPage = ({ products }: any) => {
       title: "Product has just been added to the cart",
       children: (
         <Group>
-          <Image src={product.photoURL} width={213} height={213} />
+          <Image
+            src={product.photoURL}
+            width={213}
+            height={213}
+            alt={product.name}
+          />
           <Stack>
             <Title order={3}>Would you like to continue shopping?</Title>
             <Text>

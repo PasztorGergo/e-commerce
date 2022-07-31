@@ -15,7 +15,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function index({
+export default function ProductCard({
   _id,
   description,
   name,
@@ -28,7 +28,7 @@ export default function index({
     <Link href={`/products/${name.toLowerCase().replaceAll(" ", "-")}`}>
       <Card shadow="sm" className={classes.card}>
         <Card.Section>
-          <Image src={photoURL} />
+          <Image src={photoURL} alt={name} />
         </Card.Section>
         <Card.Section p="md">
           <Title order={3}>

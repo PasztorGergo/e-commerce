@@ -19,7 +19,7 @@ export default function FeaturedCard({
       shadow={breakpoint ? "sm" : "none"}
     >
       <Card.Section>
-        <Image src={photoURL} />
+        <Image src={photoURL} alt={name} />
       </Card.Section>
       <Card.Section p="xl">
         <Group position="apart" align="center" sx={{ width: "100%" }}>
