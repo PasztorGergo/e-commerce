@@ -52,6 +52,7 @@ export default function AmountButton() {
         placeholder="Amount"
         variant="unstyled"
         hideControls
+        //@ts-ignore
         sx={{
           maxWidth: "5rem",
           background: "#fff",
