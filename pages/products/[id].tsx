@@ -6,15 +6,14 @@ import {
   Stack,
   Title,
   Text,
-  NumberInput,
+  Image,
 } from "@mantine/core";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useMemo, useReducer } from "react";
+import { useMemo } from "react";
 import { app, client, credentials } from "../../app";
 import { product } from "../../models";
-import Image from "next/image";
-import { FaCartPlus, FaMinus, FaPlus } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
 import { AmountButton } from "../../components";
 import { openConfirmModal } from "@mantine/modals";
 import Link from "next/link";
