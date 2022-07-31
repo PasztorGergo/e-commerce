@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import * as Realm from "realm-web";
 
+//@ts-ignore
 export const app = new Realm.App({ id: process.env.APP_ID });
 export const credentials = Realm.Credentials.anonymous();
 
