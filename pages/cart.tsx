@@ -1,6 +1,8 @@
-import { createStyles, Title, Text } from "@mantine/core";
+import { createStyles, Title, Text, Button } from "@mantine/core";
+import axios from "axios";
 import { NextPage } from "next";
 import Head from "next/head";
+import getStripe from "../getStripe";
 
 const useStyles = createStyles((theme) => ({
   section: {
@@ -14,6 +16,22 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+const redirectToCheckout = async () => {
+  const {
+    data: { id },
+  } = await axios.post("/api/checkout_session", {
+    items: Object.entries([{ _id: "", quantity: 1 }]).map(
+      ([, { _id, quantity }]) => ({
+        price: _id,
+        quantity,
+      })
+    ),
+  });
+
+  const stripe = getStripe();
+  await stripe.redirectToCheckout({ sessionId: id });
+};
+
 const Cart: NextPage = () => {
   const { classes } = useStyles();
   return (
@@ -26,6 +44,7 @@ const Cart: NextPage = () => {
         <Text color="dimmed">
           Here you can find the products that you added recently
         </Text>
+        <Button onClick={redirectToCheckout}>Checkout</Button>
       </section>
     </>
   );
