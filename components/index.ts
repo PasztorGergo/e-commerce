@@ -5,3 +5,4 @@ export { default as ProductCard } from "./ProductCard";
 export { default as Footer } from "./Footer";
 export { default as Ratings } from "./Ratings";
 export { default as AmountButton } from "./AmountButton";
+export { default as CartItem } from "./CartItem";

@@ -1,5 +1,5 @@
 import { Button, createStyles, Group, NumberInput } from "@mantine/core";
-import React, { useReducer } from "react";
+import React, { Ref, useReducer } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 
 const useStyles = createStyles((theme) => ({
@@ -35,7 +35,11 @@ const reducer = (state: number, action: "add" | "remove") => {
   }
 };
 
-export default function AmountButton() {
+type Props = {
+  set: any;
+};
+
+export default function AmountButton({ set }: Props) {
   const { classes } = useStyles();
   const [amount, dispatch] = useReducer(reducer, 1);
   return (
@@ -47,6 +51,7 @@ export default function AmountButton() {
         <FaPlus />
       </Button>
       <NumberInput
+        onChange={() => set(amount)}
         defaultValue={1}
         value={amount}
         placeholder="Amount"

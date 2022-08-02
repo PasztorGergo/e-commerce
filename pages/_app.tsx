@@ -5,6 +5,7 @@ import { Footer, Header } from "../components";
 import { Global } from "@emotion/react";
 import { NotificationsProvider } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import CartProvider from "../context/CartProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -30,13 +31,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         })}
       />
-      <ModalsProvider>
-        <NotificationsProvider>
-          <AppShell header={<Header />} footer={<Footer />}>
-            <Component {...pageProps} />
-          </AppShell>
-        </NotificationsProvider>
-      </ModalsProvider>
+      <CartProvider>
+        <ModalsProvider>
+          <NotificationsProvider>
+            <AppShell header={<Header />} footer={<Footer />}>
+              <Component {...pageProps} />
+            </AppShell>
+          </NotificationsProvider>
+        </ModalsProvider>
+      </CartProvider>
     </MantineProvider>
   );
 }

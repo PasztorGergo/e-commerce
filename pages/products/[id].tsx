@@ -10,13 +10,14 @@ import {
 } from "@mantine/core";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { app, client, credentials } from "../../app";
 import { product } from "../../models";
 import { FaCartPlus } from "react-icons/fa";
 import { AmountButton } from "../../components";
 import { openConfirmModal } from "@mantine/modals";
 import Link from "next/link";
+import { useCart } from "../../context/CartProvider";
 
 const useStyles = createStyles((theme) => ({
   section: {
@@ -39,8 +40,17 @@ const useStyles = createStyles((theme) => ({
 const Product: NextPage = ({ products }: any) => {
   const product: product = useMemo(() => products[0], []);
   const { classes } = useStyles();
+  const [amount, setAmount] = useState<number>();
+  const { addToCart } = useCart();
 
-  const addToCart = () => {
+  const addToCartFunc = () => {
+    addToCart({
+      _id: product._id,
+      quantity: amount,
+      name: product.name,
+      photoURL: product.photoURL,
+      price: product.price,
+    });
     openConfirmModal({
       title: "Product has just been added to the cart",
       children: (
@@ -114,11 +124,11 @@ const Product: NextPage = ({ products }: any) => {
             </Title>
             <Text>{product.description}</Text>
             <Group grow>
-              <AmountButton />
+              <AmountButton set={setAmount} />
               <Button
                 className={classes.button}
                 rightIcon={<FaCartPlus />}
-                onClick={() => addToCart()}
+                onClick={addToCartFunc}
               >
                 Add to cart
               </Button>
