@@ -20,17 +20,21 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 const redirectToCheckout = async (cart: Array<cartItem>) => {
-  const {
-    data: { id },
-  } = await axios.post("/api/checkout_session", {
-    items: Object.entries(cart).map(([, { _id, quantity }]) => ({
-      price: _id,
-      quantity,
-    })),
-  });
+  const { sessionId }: any = await fetch("/api/checkout_session", {
+    body: JSON.stringify(
+      cart.map(({ _id, quantity }: any, i: number) => ({
+        price: _id,
+        quantity,
+      }))
+    ),
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+  }).then((res) => res.json());
+  const stripe = await getStripe();
 
-  const stripe = getStripe();
-  await stripe.redirectToCheckout({ sessionId: id });
+  await stripe?.redirectToCheckout({ sessionId });
 };
 
 const Cart: NextPage = () => {

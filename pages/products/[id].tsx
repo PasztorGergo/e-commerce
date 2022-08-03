@@ -46,7 +46,7 @@ const Product: NextPage = ({ products }: any) => {
   const addToCartFunc = () => {
     addToCart({
       _id: product.stripe_id,
-      quantity: amount,
+      quantity: amount || 1,
       name: product.name,
       photoURL: product.photoURL,
       price: product.price,

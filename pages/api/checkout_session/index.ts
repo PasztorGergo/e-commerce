@@ -11,12 +11,12 @@ export default async function handler(
     try {
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
-        //@ts-ignore
-        payment_method_options: ["card"],
-        line_items: req.body.items ?? [],
+        payment_method_types: ["card"],
+        line_items: req.body ?? [],
         success_url: `${req.headers.origin}/success?session_id={CHECKOT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/cart`,
       });
+      res.status(200).json({ sessionId: session.id });
     } catch (error) {
       res.status(500);
     }

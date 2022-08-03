@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
+import { FaCartPlus } from "react-icons/fa";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -98,6 +99,11 @@ export default function Header() {
             </Link>
             <Link href="/about">
               <Anchor>About</Anchor>
+            </Link>
+            <Link href="/cart">
+              <Anchor>
+                <FaCartPlus />
+              </Anchor>
             </Link>
           </Group>
         </Group>
