@@ -6,6 +6,7 @@ import { Featured, Hero } from "../components";
 import { featured } from "../models";
 
 const Home: NextPage = ({ featured }: any) => {
+  console.log(process.env.STRIPE_SECRET_KEY);
   return (
     <>
       <Head>

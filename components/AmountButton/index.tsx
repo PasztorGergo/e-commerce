@@ -1,6 +1,7 @@
 import { Button, createStyles, Group, NumberInput } from "@mantine/core";
-import React, { Ref, useReducer } from "react";
+import React, { Ref, useCallback, useEffect, useMemo, useReducer } from "react";
 import { FaMinus, FaPlus } from "react-icons/fa";
+import { useCart } from "../../context/CartProvider";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -22,38 +23,44 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const reducer = (state: number, action: "add" | "remove") => {
-  if (action === "remove" && state - 1 === 0) {
-    return 1;
-  }
-
-  switch (action) {
-    case "add":
-      return state + 1;
-    case "remove":
-      return state - 1;
-  }
-};
-
 type Props = {
   set: any;
+  value?: number;
 };
 
-export default function AmountButton({ set }: Props) {
+export default function AmountButton({ set, value }: Props) {
+  const reducer = useCallback((state: number, action: "add" | "remove") => {
+    if (action === "remove" && state - 1 === 0) {
+      return 1;
+    }
+
+    switch (action) {
+      case "add":
+        return state + 1;
+      case "remove":
+        return state - 1;
+    }
+  }, []);
+
   const { classes } = useStyles();
-  const [amount, dispatch] = useReducer(reducer, 1);
+  const [amount, dispatch] = useReducer(reducer, value || 1);
+
+  useEffect(() => {
+    set(amount);
+  }, [amount]);
+
   return (
     <Group noWrap position="center" align="stretch" sx={{ gap: "0" }}>
       <Button
         className={`${classes.button} ${classes.amount}`}
-        onClick={() => dispatch("add")}
+        onClick={() => dispatch("remove")}
       >
-        <FaPlus />
+        <FaMinus />
       </Button>
       <NumberInput
         onChange={() => set(amount)}
         defaultValue={1}
-        value={amount}
+        value={value || amount}
         placeholder="Amount"
         variant="unstyled"
         hideControls
@@ -68,9 +75,9 @@ export default function AmountButton({ set }: Props) {
       />
       <Button
         className={`${classes.button} ${classes.amount}`}
-        onClick={() => dispatch("remove")}
+        onClick={() => dispatch("add")}
       >
-        <FaMinus />
+        <FaPlus />
       </Button>
     </Group>
   );

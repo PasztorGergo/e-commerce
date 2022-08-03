@@ -7,7 +7,6 @@ export const useCart = () => useContext(CartContext);
 
 export default function CartProvider({ children }: any) {
   const [cart, setCart] = useState<Array<cartItem>>([]);
-  console.log(cart);
 
   const addToCart = (item: cartItem) => {
     setCart((prev) => [...prev, item]);
@@ -18,7 +17,10 @@ export default function CartProvider({ children }: any) {
   };
 
   const setQuantity = (item: cartItem, quantity: number) => {
-    setCart((prev) => [...prev, { ...item, quantity }]);
+    setCart((prev) => [
+      ...prev.filter((x) => x._id != item._id),
+      { ...item, quantity },
+    ]);
   };
 
   const value = {
@@ -26,6 +28,7 @@ export default function CartProvider({ children }: any) {
     addToCart,
     removeFromCart,
     setQuantity,
+    setCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

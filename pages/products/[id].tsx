@@ -44,9 +44,10 @@ const Product: NextPage = ({ products }: any) => {
   const { addToCart } = useCart();
 
   const addToCartFunc = () => {
+    console.log(amount);
     addToCart({
       _id: product.stripe_id,
-      quantity: amount || 1,
+      quantity: amount,
       name: product.name,
       photoURL: product.photoURL,
       price: product.price,

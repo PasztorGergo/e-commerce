@@ -1,8 +1,16 @@
-import { createStyles, Title, Text, Button, Stack } from "@mantine/core";
+import {
+  createStyles,
+  Title,
+  Text,
+  Button,
+  Stack,
+  Anchor,
+} from "@mantine/core";
 import axios from "axios";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useMemo } from "react";
+import Link from "next/link";
+import { useEffect, useMemo } from "react";
 import { CartItem } from "../components";
 import { useCart } from "../context/CartProvider";
 import getStripe from "../getStripe";
@@ -17,6 +25,12 @@ const useStyles = createStyles((theme) => ({
       padding: ".2rem 1rem",
     },
     marginTop: "15vh",
+  },
+  button: {
+    background: "#FF506E",
+    "&:hover": {
+      background: theme.fn.darken("#FF506E", 0.05),
+    },
   },
 }));
 const redirectToCheckout = async (cart: Array<cartItem>) => {
@@ -39,7 +53,13 @@ const redirectToCheckout = async (cart: Array<cartItem>) => {
 
 const Cart: NextPage = () => {
   const { classes } = useStyles();
-  const { cart } = useCart();
+  const { cart, setCart } = useCart();
+  console.log(cart);
+
+  useEffect(() => {
+    setCart(cart.filter(({ quantity }: cartItem) => quantity));
+  }, []);
+
   return (
     <>
       <Head>
@@ -50,7 +70,7 @@ const Cart: NextPage = () => {
         <Text color="dimmed">
           Here you can find the products that you added recently
         </Text>
-        <Stack>
+        <Stack mt="xl">
           {cart?.map(
             ({ _id, name, photoURL, price, quantity }: cartItem, i: number) => (
               <CartItem
@@ -64,7 +84,15 @@ const Cart: NextPage = () => {
             )
           )}
         </Stack>
-        <Button onClick={() => redirectToCheckout(cart)}>Checkout</Button>
+        <Link href="/">
+          <Button
+            mt="xl"
+            className={classes.button}
+            onClick={() => redirectToCheckout(cart)}
+          >
+            Checkout
+          </Button>
+        </Link>
       </section>
     </>
   );
