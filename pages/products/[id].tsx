@@ -45,7 +45,7 @@ const Product: NextPage = ({ products }: any) => {
 
   const addToCartFunc = () => {
     addToCart({
-      _id: product._id,
+      _id: product.stripe_id,
       quantity: amount,
       name: product.name,
       photoURL: product.photoURL,
@@ -177,6 +177,7 @@ export async function getStaticProps({ params }: any) {
             photoURL
             price
             rating
+            stripe_id
           }
         }
       `,

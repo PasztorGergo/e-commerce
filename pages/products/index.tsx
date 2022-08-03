@@ -35,7 +35,15 @@ const Products: NextPage = ({ products }: any) => {
       <section className={classes.section}>
         {products.map(
           (
-            { _id, description, name, photoURL, price, rating }: product,
+            {
+              _id,
+              description,
+              name,
+              photoURL,
+              price,
+              rating,
+              stripe_id,
+            }: product,
             i: number
           ) => (
             <ProductCard
@@ -46,6 +54,7 @@ const Products: NextPage = ({ products }: any) => {
               photoURL={photoURL}
               price={price}
               rating={rating}
+              stripe_id={stripe_id}
             />
           )
         )}
@@ -70,6 +79,7 @@ export async function getStaticProps() {
             price
             photoURL
             rating
+            stripe_id
           }
         }
       `,

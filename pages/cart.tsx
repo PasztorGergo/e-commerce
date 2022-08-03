@@ -19,16 +19,14 @@ const useStyles = createStyles((theme) => ({
     marginTop: "15vh",
   },
 }));
-const redirectToCheckout = async () => {
+const redirectToCheckout = async (cart: Array<cartItem>) => {
   const {
     data: { id },
   } = await axios.post("/api/checkout_session", {
-    items: Object.entries(cart as Array<cartItem>).map(
-      ([, { _id, quantity }]) => ({
-        price: _id,
-        quantity,
-      })
-    ),
+    items: Object.entries(cart).map(([, { _id, quantity }]) => ({
+      price: _id,
+      quantity,
+    })),
   });
 
   const stripe = getStripe();
@@ -62,7 +60,7 @@ const Cart: NextPage = () => {
             )
           )}
         </Stack>
-        <Button onClick={redirectToCheckout}>Checkout</Button>
+        <Button onClick={() => redirectToCheckout(cart)}>Checkout</Button>
       </section>
     </>
   );

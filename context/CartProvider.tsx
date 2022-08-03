@@ -28,9 +28,5 @@ export default function CartProvider({ children }: any) {
     setQuantity,
   };
 
-  return (
-    <CartContext.Provider value={value}>
-      {children && children}
-    </CartContext.Provider>
-  );
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

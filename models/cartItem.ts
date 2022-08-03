@@ -1,5 +1,3 @@
-import { product } from "./product";
-
 export interface cartItem {
   _id: string;
   photoURL: string;

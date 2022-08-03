@@ -11,12 +11,8 @@ export default function CartItem({
   price,
   quantity,
 }: cartItem) {
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<number>(quantity);
   const { setQuantity } = useCart();
-
-  useEffect(() => {
-    setQuantity(_id, amount);
-  }, [amount]);
 
   return (
     <Paper withBorder shadow="sm" sx={{ width: "100%", maxHeight: "30vh" }}>

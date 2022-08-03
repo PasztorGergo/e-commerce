@@ -5,4 +5,5 @@ export interface product {
   price: number;
   rating: number;
   _id: string;
+  stripe_id: string;
 }
