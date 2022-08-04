@@ -14,7 +14,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { app, client, credentials } from "../../app";
 import { product } from "../../models";
 import { FaCartPlus } from "react-icons/fa";
-import { AmountButton } from "../../components";
+import { AmountButton, Ratings } from "../../components";
 import { openConfirmModal } from "@mantine/modals";
 import Link from "next/link";
 import { useCart } from "../../context/CartProvider";
@@ -123,7 +123,19 @@ const Product: NextPage = ({ products }: any) => {
                 )
                 .join(" ")}
             </Title>
+            <Group position="apart" my="lg">
+              <Ratings rating={product.rating} />
+              <Group grow position="left" align="flex-start">
+                <Text size="lg">
+                  ${product.price?.toString().split(".")[0]}
+                </Text>
+                <Text align="left" size="sm">
+                  {product.price?.toString().split(".")[1].substring(0, 2)}
+                </Text>
+              </Group>
+            </Group>
             <Text>{product.description}</Text>
+
             <Group grow>
               <AmountButton set={setAmount} />
               <Button

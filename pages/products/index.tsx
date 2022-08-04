@@ -17,7 +17,7 @@ const useStyles = createStyles((theme) => ({
       padding: ".2rem 1rem",
       gridTemplateColumns: "100%",
     },
-    marginTop: "15vh",
+    marginBlock: "15vh",
     display: "grid",
     gridTemplateRows: "auto",
     gap: "1rem",

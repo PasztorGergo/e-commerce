@@ -13,6 +13,7 @@ import {
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { FaCartPlus } from "react-icons/fa";
+import { useClickOutside } from "@mantine/hooks";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -34,6 +35,7 @@ export default function Header() {
   const { classes } = useStyles();
   const [isOpen, setOpen] = useState<boolean>(false);
   const controls = useAnimation();
+  const ref = useClickOutside(() => setOpen(false));
 
   useEffect(() => {
     if (isOpen) {
@@ -49,6 +51,7 @@ export default function Header() {
       height="10vh"
       sx={{ minHeight: "max-content" }}
       className={classes.header}
+      ref={ref}
     >
       <MediaQuery styles={{ display: "none" }} largerThan="sm">
         <Box sx={{ width: "100%", height: "100%", position: "relative" }}>
@@ -78,6 +81,9 @@ export default function Header() {
               </Link>
               <Link href="/about">
                 <Anchor>About</Anchor>
+              </Link>
+              <Link href="/cart">
+                <Anchor>Cart</Anchor>
               </Link>
             </Stack>
           </motion.div>

@@ -13,12 +13,12 @@ export default function Ratings({ rating }: Props) {
       {Array<any>(rounded)
         .fill("")
         .map((x, i: number) => (
-          <FaStar key={i} color="ffcd3c" size={16} />
+          <FaStar cursor="pointer" key={i} color="ffcd3c" size={16} />
         ))}
       {Array<any>(5 - rounded)
         .fill("")
         .map((x, i: number) => (
-          <FaRegStar key={i} color="ffcd3c" size={16} />
+          <FaRegStar cursor="pointer" key={i} color="ffcd3c" size={16} />
         ))}
     </Group>
   );

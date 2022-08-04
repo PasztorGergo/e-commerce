@@ -12,28 +12,37 @@ export default function FeaturedCard({
   price,
   rating,
 }: featured) {
-  const breakpoint = useMediaQuery("(min-width: 425px)", false);
+  const breakpoint = useMediaQuery("(min-width: 963px)", false);
   return (
     <Card
-      sx={{ maxWidth: breakpoint ? "25vw" : "100%", height: "100%" }}
+      sx={{
+        maxWidth: breakpoint ? "25vw" : "100%",
+        height: "100%",
+      }}
       shadow={breakpoint ? "sm" : "none"}
     >
-      <Card.Section>
-        <Image src={photoURL} alt={name} />
+      <Card.Section sx={{ display: "flex", justifyContent: "center" }}>
+        <Image
+          src={photoURL}
+          alt={name}
+          height={breakpoint ? "100%" : "10rem"}
+          width={breakpoint ? "100%" : "10rem"}
+        />
       </Card.Section>
       <Card.Section p="xl">
+        <Title order={5}>
+          {name
+            .split("-")
+            .map(
+              (current) => current.charAt(0).toUpperCase() + current.slice(1)
+            )
+            .join(" ")}
+        </Title>
         <Group position="apart" align="center" sx={{ width: "100%" }}>
-          <Title order={5}>
-            {name
-              .split("-")
-              .map(
-                (current) => current.charAt(0).toUpperCase() + current.slice(1)
-              )
-              .join(" ")}
-          </Title>
           <Ratings rating={rating} />
+
+          <Text>${price}</Text>
         </Group>
-        <Text>${price}</Text>
       </Card.Section>
       <Card.Section p="xl">
         <Button

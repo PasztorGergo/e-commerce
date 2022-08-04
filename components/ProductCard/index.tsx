@@ -1,7 +1,8 @@
-import { Card, Image, Title, Text, createStyles } from "@mantine/core";
+import { Card, Image, Title, Text, createStyles, Group } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
 import { product } from "../../models";
+import Ratings from "../Ratings";
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -39,6 +40,15 @@ export default function ProductCard({
               )
               .join(" ")}
           </Title>
+          <Group position="apart" my="lg">
+            <Ratings rating={rating} />
+            <Group grow position="left" align="flex-start">
+              <Text size="lg">${price?.toString().split(".")[0]}</Text>
+              <Text align="left" size="sm">
+                {price?.toString().split(".")[1].substring(0, 2)}
+              </Text>
+            </Group>
+          </Group>
           <Text color="dimmed">{description}</Text>
         </Card.Section>
       </Card>

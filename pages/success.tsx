@@ -21,11 +21,13 @@ const Success: NextPage = () => {
         <title>Successful Payment | Pastore</title>
       </Head>
       <Stack sx={{ width: "100%" }} align="center" justify="space-evenly">
-        <Title mt="15vh">You have successfully bought your item(s)!</Title>
-        <Text>
+        <Title align="center" mt="15vh">
+          You have successfully bought your item(s)!
+        </Title>
+        <Text align="center">
           Dear Customer, we received your order that we will process soon!
         </Text>
-        <Text>Thanks for your purchase and patient!</Text>
+        <Text align="center">Thanks for your purchase and patient!</Text>
         <Link href="/">
           <Button className={classes.button} rightIcon={<FaHome />}>
             Back to home

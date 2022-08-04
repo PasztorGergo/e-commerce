@@ -23,7 +23,7 @@ type props = {
 };
 
 export default function Featured({ featured }: props) {
-  const breakpoint = useMediaQuery("(min-width: 425px)", false);
+  const breakpoint = useMediaQuery("(min-width:963px)", false);
   const [page, setPage] = useState<number>(1);
   const { classes } = useStyles();
 
