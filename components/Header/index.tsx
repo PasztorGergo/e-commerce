@@ -9,11 +9,20 @@ import {
   MediaQuery,
   Stack,
   Title,
+  Avatar,
+  TextInput,
+  Tabs,
+  Button,
+  Text,
+  PasswordInput,
 } from "@mantine/core";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
 import { FaCartPlus } from "react-icons/fa";
 import { useClickOutside } from "@mantine/hooks";
+import { useAuth } from "../../context/AuthProvider";
+import { openModal } from "@mantine/modals";
+import { useForm } from "@mantine/form";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -29,6 +38,12 @@ const useStyles = createStyles((theme) => ({
     },
     minHeight: "fit-content",
   },
+  button: {
+    backgroundColor: "#ff506e",
+    "&:hover": {
+      backgroundColor: theme.fn.darken("#ff506e", 0.05),
+    },
+  },
 }));
 
 export default function Header() {
@@ -36,6 +51,103 @@ export default function Header() {
   const [isOpen, setOpen] = useState<boolean>(false);
   const controls = useAnimation();
   const ref = useClickOutside(() => setOpen(false));
+  const { user, loginWithEmail, loginWithGoogle, register, loading }: any =
+    useAuth();
+
+  const loginForm = useForm({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const signupForm = useForm({
+    initialValues: {
+      email: "",
+      password: "",
+      confirm: "",
+    },
+  });
+
+  const modals = () => {
+    openModal({
+      title: "Login or Register Account",
+      children: (
+        <Group sx={{ width: "100%" }}>
+          <Tabs defaultValue="login" sx={{ width: "100%" }}>
+            <Tabs.List>
+              <Tabs.Tab value="login">
+                <Text weight="600">Log In</Text>
+              </Tabs.Tab>
+              <Tabs.Tab value="signup">
+                <Text weight="600">Sign Up</Text>
+              </Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="login">
+              <Stack mt="lg">
+                <form
+                  onSubmit={loginForm.onSubmit((e) =>
+                    loginWithEmail(e.email, e.password)
+                  )}
+                >
+                  <TextInput
+                    type="email"
+                    label="E-mail address"
+                    {...loginForm.getInputProps("email")}
+                  />
+                  <PasswordInput
+                    label="Password"
+                    {...loginForm.getInputProps("password")}
+                  />
+                  <Button
+                    disabled={loading}
+                    type="submit"
+                    mt="xl"
+                    className={classes.button}
+                  >
+                    Log In
+                  </Button>
+                </form>
+              </Stack>
+            </Tabs.Panel>
+            <Tabs.Panel value="signup">
+              <Stack mt="lg">
+                <form
+                  onSubmit={signupForm.onSubmit((e) => {
+                    if (e.password != e.confirm) return;
+
+                    register(e.email, e.password);
+                  })}
+                >
+                  <TextInput
+                    type="email"
+                    label="E-mail address"
+                    {...signupForm.getInputProps("email")}
+                  />
+                  <PasswordInput
+                    label="Password"
+                    {...signupForm.getInputProps("password")}
+                  />
+                  <PasswordInput
+                    label="Confirm Password"
+                    {...signupForm.getInputProps("confirm")}
+                  />
+                  <Button
+                    disabled={loading}
+                    type="submit"
+                    mt="xl"
+                    className={classes.button}
+                  >
+                    Sign Up
+                  </Button>
+                </form>
+              </Stack>
+            </Tabs.Panel>
+          </Tabs>
+        </Group>
+      ),
+    });
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -111,6 +223,26 @@ export default function Header() {
                 <FaCartPlus />
               </Anchor>
             </Link>
+            {user ? (
+              <Link href="/profile">
+                <Avatar
+                  sx={{ cursor: "pointer" }}
+                  radius="xl"
+                  alt={user?.name}
+                  src={user?.photoURL}
+                  color="pink"
+                />
+              </Link>
+            ) : (
+              <Avatar
+                onClick={modals}
+                sx={{ cursor: "pointer" }}
+                radius="xl"
+                alt={user?.name}
+                src={user?.photoURL}
+                color="pink"
+              />
+            )}
           </Group>
         </Group>
       </MediaQuery>

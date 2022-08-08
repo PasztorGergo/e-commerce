@@ -58,9 +58,11 @@ export default function CartItem({
           Remove
         </Button>
         <Group grow position="left" align="flex-start">
-          <Text size="lg">${(price * quantity)?.toString().split(".")[0]}</Text>
+          <Text size="lg">
+            ${(price * quantity)?.toString()?.split(".")[0]}
+          </Text>
           <Text align="left" size="sm">
-            {(price * quantity)?.toString().split(".")[1].substring(0, 2)}
+            {(price * quantity)?.toString().split(".")[1]?.substring(0, 2)}
           </Text>
         </Group>
       </Group>
