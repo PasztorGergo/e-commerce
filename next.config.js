@@ -13,6 +13,7 @@ const nextConfig = {
     STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     GOOGLE_UID: process.env.GOOGLE_UID,
+    GOOGLE_SECRET: process.env.GOOGLE_SECRET,
   },
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Anchor,
   Box,
@@ -18,10 +18,10 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import { motion, useAnimation } from "framer-motion";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartPlus, FaGoogle } from "react-icons/fa";
 import { useClickOutside } from "@mantine/hooks";
 import { useAuth } from "../../context/AuthProvider";
-import { openModal } from "@mantine/modals";
+import { closeAllModals, openModal } from "@mantine/modals";
 import { useForm } from "@mantine/form";
 
 const useStyles = createStyles((theme) => ({
@@ -54,20 +54,11 @@ export default function Header() {
   const { user, loginWithEmail, loginWithGoogle, register, loading }: any =
     useAuth();
 
-  const loginForm = useForm({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-  });
-
-  const signupForm = useForm({
-    initialValues: {
-      email: "",
-      password: "",
-      confirm: "",
-    },
-  });
+  const loginEmail = useRef<any>();
+  const loginPassword = useRef<any>();
+  const signupEmail = useRef<any>();
+  const signupPassword = useRef<any>();
+  const signupConfim = useRef<any>();
 
   const modals = () => {
     openModal({
@@ -86,61 +77,85 @@ export default function Header() {
             <Tabs.Panel value="login">
               <Stack mt="lg">
                 <form
-                  onSubmit={loginForm.onSubmit((e) =>
-                    loginWithEmail(e.email, e.password)
-                  )}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    loginWithEmail(
+                      loginEmail.current.value,
+                      loginPassword.current.value
+                    );
+                  }}
                 >
                   <TextInput
+                    ref={loginEmail}
                     type="email"
                     label="E-mail address"
-                    {...loginForm.getInputProps("email")}
                   />
-                  <PasswordInput
-                    label="Password"
-                    {...loginForm.getInputProps("password")}
-                  />
+                  <PasswordInput label="Password" ref={loginPassword} />
                   <Button
                     disabled={loading}
                     type="submit"
                     mt="xl"
                     className={classes.button}
+                    onClick={() => closeAllModals()}
                   >
                     Log In
                   </Button>
                 </form>
+                <Text>or</Text>
+                <Button
+                  onClick={() => {
+                    loginWithGoogle();
+                    closeAllModals();
+                  }}
+                  leftIcon={<FaGoogle />}
+                  className={classes.button}
+                >
+                  Sign in with Google
+                </Button>
               </Stack>
             </Tabs.Panel>
             <Tabs.Panel value="signup">
               <Stack mt="lg">
                 <form
-                  onSubmit={signupForm.onSubmit((e) => {
-                    if (e.password != e.confirm) return;
+                  onSubmit={(e) => {
+                    e.preventDefault();
 
-                    register(e.email, e.password);
-                  })}
+                    if (
+                      signupPassword.current.value != signupConfim.current.value
+                    )
+                      return;
+
+                    register(
+                      signupEmail.current.value,
+                      signupPassword.current.value
+                    );
+                  }}
                 >
                   <TextInput
                     type="email"
                     label="E-mail address"
-                    {...signupForm.getInputProps("email")}
+                    ref={signupEmail}
                   />
-                  <PasswordInput
-                    label="Password"
-                    {...signupForm.getInputProps("password")}
-                  />
-                  <PasswordInput
-                    label="Confirm Password"
-                    {...signupForm.getInputProps("confirm")}
-                  />
+                  <PasswordInput label="Password" ref={signupPassword} />
+                  <PasswordInput label="Confirm Password" ref={signupConfim} />
                   <Button
                     disabled={loading}
                     type="submit"
                     mt="xl"
+                    onClick={() => closeAllModals()}
                     className={classes.button}
                   >
                     Sign Up
                   </Button>
                 </form>
+                <Text>or</Text>
+                <Button
+                  onClick={loginWithGoogle}
+                  leftIcon={<FaGoogle />}
+                  className={classes.button}
+                >
+                  Sign in with Google
+                </Button>
               </Stack>
             </Tabs.Panel>
           </Tabs>
