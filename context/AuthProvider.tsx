@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { app, client } from "../app";
 import * as Realm from "realm-web";
 import Router, { useRouter } from "next/router";
+import { gql } from "@apollo/client";
 
 const AuthContext = createContext<any>({});
 
@@ -22,7 +23,24 @@ export default function AuthProvider({ children }: any) {
     try {
       setLoading(true);
       const logged = await app.logIn(credentials);
-      setUser(logged.profile);
+
+      setUser(
+        (
+          await client.query({
+            query: gql`
+        query GetUser{
+          user(query: {uid: "${logged.id}"}){
+            displayName
+            photoURL
+            email
+            products
+            uid
+          }
+        }
+      `,
+          })
+        ).data.user
+      );
       router.push("/profile");
     } catch (error: any) {
       console.error({ message: error.message });
@@ -33,13 +51,14 @@ export default function AuthProvider({ children }: any) {
   const loginWithGoogle = async () => {
     //@ts-ignore
     const credentials = Realm.Credentials.google({
-      redirectUrl: "http://localhost:3000",
+      redirectUrl: "http://localhost:3000/index.html",
     });
 
     try {
       setLoading(true);
       const logged = await app.logIn(credentials);
       setUser(logged.profile);
+      Realm.handleAuthRedirect();
       router.push("/profile");
     } catch (error: any) {
       console.error({ message: error.message });
@@ -55,9 +74,27 @@ export default function AuthProvider({ children }: any) {
       const credentials = Realm.Credentials.emailPassword(email, password);
 
       const logged = await app.logIn(credentials);
-      setUser(logged.profile);
+      const { name, pictureUrl } = logged.profile;
 
-      await client.mutate();
+      setUser(
+        (
+          await client.mutate({
+            mutation: gql`mutation AddUser{
+          insertOneUser(data:{displayName:"${
+            name || email.split("@")[0]
+          }", email:"${email}",photoURL:"${pictureUrl}",products:[], uid:"${
+              logged.id
+            }"}) {
+            displayName
+            email
+            photoURL
+            products
+            uid
+          }
+        }`,
+          })
+        ).data.insertOneUser
+      );
 
       router.push("/profile");
     } catch (error: any) {

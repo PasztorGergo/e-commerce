@@ -16,6 +16,10 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
+interface Porps extends product {
+  sx?: any;
+}
+
 export default function ProductCard({
   _id,
   description,
@@ -23,18 +27,19 @@ export default function ProductCard({
   photoURL,
   price,
   rating,
-}: product) {
+  sx,
+}: Porps) {
   const { classes } = useStyles();
   return (
-    <Link href={`/products/${name.toLowerCase().replaceAll(" ", "-")}`}>
+    <Link href={`/products/${name?.toLowerCase().replaceAll(" ", "-")}`}>
       <Card shadow="sm" className={classes.card}>
         <Card.Section>
-          <Image src={photoURL} alt={name} />
+          <Image sx={sx} src={photoURL} alt={name} />
         </Card.Section>
         <Card.Section p="md">
           <Title order={3}>
             {name
-              .split("-")
+              ?.split("-")
               .map(
                 (current) => current.charAt(0).toUpperCase() + current.slice(1)
               )

@@ -16,6 +16,7 @@ import { showNotification } from "@mantine/notifications";
 import React, { useCallback, useMemo, useState } from "react";
 import { FaCheck, FaPlus, FaRegImage, FaTimes, FaUpload } from "react-icons/fa";
 import { client } from "../../app";
+import { useAuth } from "../../context/AuthProvider";
 
 const useStyles = createStyles((theme) => ({
   button: {
@@ -28,6 +29,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function AddProduct() {
   const fr = useMemo(() => new FileReader(), []);
+  const { user } = useAuth();
   const { classes } = useStyles();
   const [picture, setPicture] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -57,13 +59,35 @@ export default function AddProduct() {
                   rating: 0.00,
                   photoURL: "${img}"
                 }
-              ) {
+                ) {
+                _id
                 name
               }
             }
           `,
           })
         ).data.insertOneProduct;
+
+        const products =
+          user?.products?.length > 0
+            ? [
+                ...(user.products as Array<any>)?.map(({ _id }: any) => _id),
+                product._id,
+              ]
+            : [`"${product._id}"`];
+
+        console.log(user.uid);
+
+        await client.mutate({
+          mutation: gql`
+            mutation AddProductToUser{
+              updateOneUser(set:{products: ${products}}, query: {uid: "${user.uid}"}){
+                products
+              }
+            }
+          `,
+        });
+
         showNotification({
           message: `${product.name} has been added`,
           icon: <FaCheck />,

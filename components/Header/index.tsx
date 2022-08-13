@@ -109,7 +109,6 @@ export default function Header() {
                   }}
                   leftIcon={<FaGoogle />}
                   className={classes.button}
-                  disabled
                 >
                   Sign in with Google
                 </Button>
@@ -153,7 +152,6 @@ export default function Header() {
                 <Button
                   onClick={loginWithGoogle}
                   leftIcon={<FaGoogle />}
-                  disabled
                   className={classes.button}
                 >
                   Sign in with Google
