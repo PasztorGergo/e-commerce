@@ -45,7 +45,7 @@ export default function ProductCard({
             <Group grow position="left" align="flex-start">
               <Text size="lg">${price?.toString().split(".")[0]}</Text>
               <Text align="left" size="sm">
-                {price?.toString().split(".")[1].substring(0, 2)}
+                {(price?.toString().split(".")[1] || "00").substring(0, 2)}
               </Text>
             </Group>
           </Group>

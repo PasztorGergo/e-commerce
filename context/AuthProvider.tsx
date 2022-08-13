@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { app } from "../app";
+import { app, client } from "../app";
 import * as Realm from "realm-web";
 import Router, { useRouter } from "next/router";
 
@@ -8,7 +8,7 @@ const AuthContext = createContext<any>({});
 export const useAuth = () => useContext(AuthContext);
 
 export default function AuthProvider({ children }: any) {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<any>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
@@ -56,6 +56,9 @@ export default function AuthProvider({ children }: any) {
 
       const logged = await app.logIn(credentials);
       setUser(logged.profile);
+
+      await client.mutate();
+
       router.push("/profile");
     } catch (error: any) {
       console.log({ message: error.message });

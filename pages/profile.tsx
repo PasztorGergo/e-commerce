@@ -8,15 +8,17 @@ import {
   Text,
   Grid,
   Button,
+  Paper,
 } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { closeAllModals, openModal } from "@mantine/modals";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { FaRegImage, FaTimes, FaUpload } from "react-icons/fa";
+import { FaPlus, FaRegImage, FaTimes, FaUpload } from "react-icons/fa";
 import { client } from "../app";
-import { ProductCard } from "../components";
+import { AddProduct, ProductCard } from "../components";
 import { useAuth } from "../context/AuthProvider";
 
 const useStyles = createStyles((theme) => ({
@@ -47,6 +49,8 @@ const Profile: NextPage = () => {
   const { classes } = useStyles();
   const [products, setProducts] = useState<any>();
   const [picture, setPicture] = useState<any>();
+  const [isCreate, setCreate] = useState<boolean>(false);
+  const router = useRouter();
 
   const uploadPP = async () => {
     openModal({
@@ -103,45 +107,75 @@ const Profile: NextPage = () => {
   }, [user]);
 
   return (
-    <>
-      <Head>
-        <title>Manage Profile | Pastore</title>
-      </Head>
-      <section className={classes.section}>
-        <Stack>
-          <Group>
-            <Avatar
-              src={user?.photoURL}
-              alt={user?.name}
-              className={classes.avatar}
-              color="pink"
-              onClick={uploadPP}
-            />
-            <Stack>
-              <Title order={2}>{user?.name}</Title>
-              <Text color="dimmed">{user.email}</Text>
-            </Stack>
-          </Group>
-          <Grid columns={4}>
-            {products &&
-              products.map(
-                ({ _id, name, price, rating, description, photoURL }: any) => (
-                  <ProductCard
-                    stripe_id=""
-                    _id={_id}
-                    name={name}
-                    rating={rating}
-                    description={description}
-                    photoURL={photoURL}
-                    price={price}
-                    key={_id}
-                  />
-                )
-              )}
-          </Grid>
-        </Stack>
-      </section>
-    </>
+    user && (
+      <>
+        <Head>
+          <title>Manage Profile | Pastore</title>
+        </Head>
+        <section className={classes.section}>
+          <Stack>
+            <Group>
+              <Avatar
+                src={user?.photoURL}
+                alt={user?.name}
+                className={classes.avatar}
+                color="pink"
+                onClick={uploadPP}
+              />
+              <Stack>
+                <Title order={2}>{user.name}</Title>
+                <Text color="dimmed">{user.email}</Text>
+              </Stack>
+            </Group>
+            {isCreate && <AddProduct />}
+            <Grid columns={4}>
+              <Paper
+                sx={{
+                  opacity: 0.7,
+                  borderWidth: ".3rem",
+                  borderStyle: "dashed",
+                  background: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+                onClick={() => setCreate((prev) => !prev)}
+                withBorder
+                p="xl"
+              >
+                <Text>
+                  {isCreate ? "Close Product Creator" : "Add new product"}
+                </Text>
+                <FaPlus size={32} />
+              </Paper>
+              {products &&
+                products.map(
+                  ({
+                    _id,
+                    name,
+                    price,
+                    rating,
+                    description,
+                    photoURL,
+                  }: any) => (
+                    <ProductCard
+                      stripe_id=""
+                      _id={_id}
+                      name={name}
+                      rating={rating}
+                      description={description}
+                      photoURL={photoURL}
+                      price={price}
+                      key={_id}
+                    />
+                  )
+                )}
+            </Grid>
+          </Stack>
+        </section>
+      </>
+    )
   );
 };
 
